@@ -1,0 +1,188 @@
+/* Estilos generales */
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  --color-ppal: #3abef9;
+  --color-secondary: #3572ef;
+  --color-gray: #b4b4b8;
+  --color-gray-dark: #686d76;
+}
+
+html {
+  font-size: 62.5%;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  color: rgba(58, 58, 58, 0.885);
+}
+body {
+  background-color: #f0f0f0;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  padding: 40px;
+  margin: 50px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.container-toogle {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-toogle-theme {
+  position: relative;
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 5px;
+  background-color: #f7f7f7;
+  border: solid 1px #cecdcd;
+  cursor: pointer;
+}
+.btn-toogle-theme:hover {
+  color: white;
+  background-color: var(--color-gray-dark);
+}
+
+.dark-mode {
+  color: white;
+  background-color: var(--color-gray-dark) #686d76;
+}
+
+h1 {
+  font-size: 1.89rem;
+  font-weight: bold;
+  margin: 25px 0;
+}
+
+.container-new-task {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.btn-task {
+  border: none;
+  display: flex;
+  justify-content: center;
+  font-size: 1.8rem;
+  background-color: transparent;
+}
+.fa-circle-dot {
+  color: var(--color-gray);
+  border: none;
+  background-color: transparent;
+  outline: none;
+}
+.new-task {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.new-task input {
+  font-family: 'Poppins', sans-serif;
+  color: #3a3a3ae2;
+  font-size: 1.5rem;
+  width: 100%;
+  height: 50px;
+  padding: 20px;
+  margin: 30px 20px 30px 0;
+  border-radius: 5px;
+  border: solid 1px #eaeaea;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  outline: none;
+}
+.new-task input:hover {
+  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.1);
+}
+
+.new-task input::placeholder {
+  color: gray; /* Cambia el color del texto del placeholder */
+  opacity: 0.4; /* Ajusta la opacidad del texto del placeholder */
+}
+.btn-add {
+  background-color: var(--color-ppal);
+  height: 50px;
+  width: 100px;
+  font-weight: bold;
+  color: #fff;
+  padding: 10px 10px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.btn-add:hover {
+  background-color: #00aefe;
+  outline: none;
+}
+
+.container-task {
+  display: flex;
+  flex-direction: column;
+  margin: 30px 0;
+}
+
+.task {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.container-task i {
+  margin-right: 10px;
+}
+
+.task-text-content {
+  width: 100%;
+}
+
+.container-task p {
+  margin-right: 30px;
+}
+
+.task-content {
+  width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fa-delete-left,
+.fa-pencil,
+.fa-circle {
+  color: var(--color-gray);
+  cursor: pointer;
+  background-color: transparent;
+  outline: none;
+}
+
+.fa-delete-left:hover,
+.fa-pencil:hover,
+.fa-circle:hover {
+  color: var(--color-gray-dark);
+}
+
+footer {
+  position: inherit;
+  width: 100%; /* Establecemos el ancho del footer a la anchura de la pantalla */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  color: #666;
+  bottom: 0;
+  margin-bottom: 30px;
+}
