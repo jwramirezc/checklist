@@ -4,7 +4,14 @@ const tasks = taskList.querySelectorAll('.task');
 const btnCheck = document.getElementById('check-task');
 // loadTasksFromLocalStorage();
 
-//objeto de las tareas con características
+taskArray = [];
+
+//constructor de las tareas con características
+function Task(taskId, task, status) {
+  this.taskId = taskId;
+  this.task = task;
+  this.status = status;
+}
 
 taskForm.addEventListener('submit', event => {
   event.preventDefault();
@@ -12,7 +19,6 @@ taskForm.addEventListener('submit', event => {
   const task = taskInput.value;
   //   console.log(task);
   if (task) {
-    // storeTaskInLocalStorage(task);
     createTaskElement(task);
   }
   taskInput.value = '';
@@ -53,6 +59,15 @@ function createTaskElement(task) {
 
   //Agregando el nuevo elemento li al ul en la primera posición
   taskList.prepend(newLi);
+
+  const taskId = Math.floor(Math.random() * 1000) + 1;
+  const newTask = new Task(taskId, task, 'active');
+
+  // Asigno el código único al elemento LI
+  newLi.dataset.id = taskId;
+  storeTaskInLocalStorage(newTask);
+  taskArray.push(newTask);
+  return newTask;
 }
 
 //Creando el evento click para el botón check tarea
@@ -60,8 +75,8 @@ taskList.addEventListener('click', event => {
   //   console.log(event.target);
   if (event.target.classList.contains('fa-circle')) {
     const currentTask = event.target.closest('.task');
-    taskList.appendChild(currentTask);
     checkTask(currentTask);
+    taskList.appendChild(currentTask);
   } else if (
     event.target.classList.contains('fa-delete-left') ||
     event.target.classList.contains('fa-pencil')
@@ -79,6 +94,18 @@ taskList.addEventListener('click', event => {
 
 //Creando los estilos de una tarea completada
 function checkTask(currentTask) {
+  const taskStorage = JSON.parse(localStorage.getItem('tasks') || '[]');
+  const taskId = currentTask.dataset.id;
+
+  for (let i = 0; i < taskStorage.length; i++) {
+    if (taskStorage[i].taskId == taskId) {
+      taskStorage[i].status = 'completed';
+      break;
+    }
+  }
+
+  localStorage.setItem('tasks', JSON.stringify(taskStorage));
+
   currentTask.querySelector('p.task-text-content').style.textDecoration =
     'line-through';
   currentTask.querySelector('p.task-text-content').style.opacity = '0.5';
@@ -89,27 +116,46 @@ function checkTask(currentTask) {
 //Eliminando tareas definitivamente
 function deleteTask(currentTask) {
   if (confirm('Está seguro de eliminar la tarea?')) {
+    const taskStorage = JSON.parse(localStorage.getItem('tasks') || '[]');
+    const taskId = currentTask.dataset.id;
+
+    for (let i = 0; i < taskStorage.length; i++) {
+      if (taskStorage[i].taskId == taskId) {
+        taskStorage.splice(i, 1); // Elimina la instancia con id igual a taskId
+        break;
+      }
+    }
     taskList.removeChild(currentTask);
+    localStorage.setItem('tasks', JSON.stringify(taskStorage));
   }
 }
 
 //Editar tareas
 function editTask(currentTask) {
-  //   const currentTask = event.target.closest('.task');
   let oldText = currentTask.querySelector('p.task-text-content').textContent;
   let newText = prompt(`Ingrese el nuevo texto de la tarea`, oldText);
   currentTask.querySelector('p.task-text-content').textContent = newText;
+
+  const taskStorage = JSON.parse(localStorage.getItem('tasks') || '[]');
+  const taskId = currentTask.dataset.id;
+
+  for (let i = 0; i < taskStorage.length; i++) {
+    if (taskStorage[i].taskId == taskId) {
+      taskStorage[i].task = newText;
+      break;
+    }
+  }
+  localStorage.setItem('tasks', JSON.stringify(taskStorage));
 }
 
 //Guardando los cambios en localStorage
-
-function storeTaskInLocalStorage(task) {
+function storeTaskInLocalStorage(newTask) {
   const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-  tasks.push(task);
+  tasks.push(newTask);
   localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
-// //Cargando las tareas guardadas en localStorage
+//Cargando las tareas guardadas en localStorage
 
 function loadTasksFromLocalStorage() {
   const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
@@ -128,11 +174,9 @@ function loadTasksFromLocalStorage() {
 //   localStorage.setItem('tasks', JSON.stringify(tasks));
 // }
 
-// function updateLocalStorage() {
-//   const tasks = [];
-//   taskList.querySelectorAll('li').forEach(li => {
-//     const taskText = li.querySelector('p.task-text-content').textContent;
-//     tasks.push(taskText);
-//   });
-//   localStorage.setItem('tasks', JSON.stringify(tasks));
-// }
+function updateLocalStorage(taskUpdated) {
+  console.log(taskUpdated);
+  const tasks = [];
+
+  localStorage.setItem('tasks', JSON.stringify(tasks));
+}
