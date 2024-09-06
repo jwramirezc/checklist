@@ -2,9 +2,25 @@ const taskForm = document.getElementById('form-info');
 const taskList = document.getElementById('task-list');
 const tasks = taskList.querySelectorAll('.task');
 const btnCheck = document.getElementById('check-task');
-// loadTasksFromLocalStorage();
+const changeTheme = document.getElementById('btn-toogle-theme');
+const mainClass = document.querySelector('main');
 
-taskArray = [];
+loadTasksFromLocalStorage();
+
+changeTheme.addEventListener('click', change);
+
+//cambiando el tema de la aplicación
+function change() {
+  mainClass.classList.toggle('dark-mode');
+  const theme = mainClass.classList.contains('dark-mode') ? 'dark' : 'light';
+  localStorage.setItem('theme', theme);
+}
+
+if (localStorage.getItem('theme') === 'dark') {
+  mainClass.classList.add('dark-mode');
+} else {
+  mainClass.classList.remove('dark-mode');
+}
 
 //constructor de las tareas con características
 function Task(taskId, task, status) {
@@ -12,7 +28,6 @@ function Task(taskId, task, status) {
   this.task = task;
   this.status = status;
 }
-
 taskForm.addEventListener('submit', event => {
   event.preventDefault();
   const taskInput = document.getElementById('insert-task');
@@ -22,6 +37,7 @@ taskForm.addEventListener('submit', event => {
     createTaskElement(task);
   }
   taskInput.value = '';
+  taskInput.focus();
 });
 
 //Creando una nueva tarea
@@ -66,10 +82,8 @@ function createTaskElement(task) {
   // Asigno el código único al elemento LI
   newLi.dataset.id = taskId;
   storeTaskInLocalStorage(newTask);
-  taskArray.push(newTask);
   return newTask;
 }
-
 //Creando el evento click para el botón check tarea
 taskList.addEventListener('click', event => {
   //   console.log(event.target);
@@ -90,6 +104,8 @@ taskList.addEventListener('click', event => {
       //   updateLocalStorage();
     }
   }
+  const taskInput = document.getElementById('insert-task');
+  taskInput.focus();
 });
 
 //Creando los estilos de una tarea completada
@@ -112,7 +128,6 @@ function checkTask(currentTask) {
   currentTask.querySelector('i.fa-circle').className =
     'fa-regular fa-circle-dot';
 }
-
 //Eliminando tareas definitivamente
 function deleteTask(currentTask) {
   if (confirm('Está seguro de eliminar la tarea?')) {
@@ -129,7 +144,6 @@ function deleteTask(currentTask) {
     localStorage.setItem('tasks', JSON.stringify(taskStorage));
   }
 }
-
 //Editar tareas
 function editTask(currentTask) {
   let oldText = currentTask.querySelector('p.task-text-content').textContent;
@@ -155,28 +169,72 @@ function storeTaskInLocalStorage(newTask) {
   localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
-//Cargando las tareas guardadas en localStorage
+//Cargando las tareas guardadas desde localStorage
 
 function loadTasksFromLocalStorage() {
   const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
 
   console.log(tasks);
   tasks.forEach(task => {
-    createTaskElement(task); //Creando las tareas
-    console.log(task);
+    // Crear un nuevo elemento li
+    const newLi = document.createElement('li');
+    newLi.className = 'task';
+
+    // Agregar los elementos hijos al nuevo elemento li
+
+    //Agregando el radio button inicial
+    const newTaskButton = document.createElement('button');
+    newTaskButton.id = 'check-task';
+    newTaskButton.className = 'btn-task';
+
+    if (task.status == 'completed') {
+      newTaskButton.innerHTML = '<i class="fa-regular fa-circle-dot"></i>';
+    } else {
+      newTaskButton.innerHTML = '<i class="fa-regular fa-circle"></i>';
+    }
+
+    newLi.append(newTaskButton);
+
+    //Agregando el texto de la tarea
+    const newTaskContent = document.createElement('p');
+    newTaskContent.className = 'task-text-content';
+
+    if (task.status == 'completed') {
+      newTaskContent.textContent = task.task;
+      newTaskContent.style.textDecoration = 'line-through';
+      newTaskContent.style.opacity = '0.5';
+    } else {
+      newTaskContent.textContent = task.task;
+    }
+
+    newLi.append(newTaskContent);
+
+    //Agregando el  button eliminar
+    const newTaskButtonDelete = document.createElement('button');
+    newTaskButtonDelete.className = 'btn-task';
+    newTaskButtonDelete.innerHTML = '<i class="fa-solid fa-delete-left">';
+    newLi.append(newTaskButtonDelete);
+
+    //Agregando el  button editar
+    const newTaskButtonEdit = document.createElement('button');
+    newTaskButtonEdit.className = 'btn-task';
+    newTaskButtonEdit.innerHTML = '<i class="fa-solid fa-pencil">';
+    newLi.append(newTaskButtonEdit);
+
+    //Agregando el nuevo elemento li al ul en la primera posición
+    taskList.prepend(newLi);
+
+    const taskId = task.taskId;
+    const newTask = new Task(taskId, task.task, task.status);
+
+    // Asigno el código único al elemento LI
+    newLi.dataset.id = taskId;
+    // storeTaskInLocalStorage(newTask);
+    return newTask;
   });
 }
-
-// function updateLocalStorage() {
-//   const tasks = Array.from(taskList.querySelectorAll('li')).map(
-//     li => li.querySelectorAll('p.task-text-content').textContent
-//   );
-//   localStorage.setItem('tasks', JSON.stringify(tasks));
-// }
-
 function updateLocalStorage(taskUpdated) {
   console.log(taskUpdated);
   const tasks = [];
-
   localStorage.setItem('tasks', JSON.stringify(tasks));
 }

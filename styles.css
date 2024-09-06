@@ -7,7 +7,7 @@
   --color-ppal: #3abef9;
   --color-secondary: #3572ef;
   --color-gray: #b4b4b8;
-  --color-gray-dark: #686d76;
+  --color-gray-dark: #54575d;
 }
 
 html {
@@ -18,7 +18,7 @@ html {
   color: rgba(58, 58, 58, 0.885);
 }
 body {
-  background-color: #f0f0f0;
+  background-color: #d1d1d1;
 }
 
 main {
@@ -36,8 +36,7 @@ main {
   display: flex;
   justify-content: flex-end;
 }
-
-.btn-toogle-theme {
+#btn-toogle-theme {
   position: relative;
   display: inline-block;
   padding: 10px 20px;
@@ -46,14 +45,14 @@ main {
   border: solid 1px #cecdcd;
   cursor: pointer;
 }
-.btn-toogle-theme:hover {
+#btn-toogle-theme:hover {
   color: white;
   background-color: var(--color-gray-dark);
 }
 
 .dark-mode {
   color: white;
-  background-color: var(--color-gray-dark) #686d76;
+  background-color: var(--color-gray-dark);
 }
 
 h1 {
