@@ -174,8 +174,16 @@ function storeTaskInLocalStorage(newTask) {
 function loadTasksFromLocalStorage() {
   const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
 
-  console.log(tasks);
-  tasks.forEach(task => {
+  const completedTasks = tasks.filter(task => task.status == 'completed');
+  const activeTasks = tasks.filter(task => task.status !== 'completed');
+
+  const tasksOrdered = [...activeTasks, ...completedTasks].sort((a, b) =>
+    a.status === 'completed' ? -1 : b.status !== 'completed' ? 1 : 0
+  );
+
+  console.log(tasksOrdered);
+
+  tasksOrdered.forEach(task => {
     // Crear un nuevo elemento li
     const newLi = document.createElement('li');
     newLi.className = 'task';

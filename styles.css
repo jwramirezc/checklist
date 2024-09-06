@@ -8,6 +8,7 @@
   --color-secondary: #3572ef;
   --color-gray: #b4b4b8;
   --color-gray-dark: #54575d;
+  --color-gray-btn: #777777;
 }
 
 html {
@@ -171,7 +172,7 @@ h1 {
 .fa-delete-left:hover,
 .fa-pencil:hover,
 .fa-circle:hover {
-  color: var(--color-gray-dark);
+  color: var(--color-gray-btn);
 }
 
 footer {
