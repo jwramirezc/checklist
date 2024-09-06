@@ -32,7 +32,7 @@ taskForm.addEventListener('submit', event => {
   event.preventDefault();
   const taskInput = document.getElementById('insert-task');
   const task = taskInput.value;
-  //   console.log(task);
+  console.log(task);
   if (task) {
     createTaskElement(task);
   }
@@ -142,6 +142,7 @@ function deleteTask(currentTask) {
     }
     taskList.removeChild(currentTask);
     localStorage.setItem('tasks', JSON.stringify(taskStorage));
+    console.log(taskList);
   }
 }
 //Editar tareas
