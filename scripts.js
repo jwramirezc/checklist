@@ -68,37 +68,30 @@ class Task {
     new Task().storeTaskInLocalStorage(newTask);
     return newTask;
   }
-
-  checkTaskElement(currentTask) {
+  updateTaskElement(currentTask, updateStatus) {
     const taskStorage = JSON.parse(localStorage.getItem('tasks') || '[]');
     const taskId = currentTask.dataset.id;
 
     for (let i = 0; i < taskStorage.length; i++) {
       if (taskStorage[i]._taskId == taskId) {
-        taskStorage[i]._status = 'completed';
-        break;
-      }
-    }
-
-    localStorage.setItem('tasks', JSON.stringify(taskStorage));
-
-    currentTask.querySelector('p.task-text-content').style.textDecoration =
-      'line-through';
-    currentTask.querySelector('p.task-text-content').style.opacity = '0.5';
-    currentTask.querySelector('i.fa-circle').className =
-      'fa-regular fa-circle-dot';
-  }
-  updateTaskElement(currentTask) {
-    let oldText = currentTask.querySelector('p.task-text-content').textContent;
-    let newText = prompt(`Ingrese el nuevo texto de la tarea`, oldText);
-    currentTask.querySelector('p.task-text-content').textContent = newText;
-
-    const taskStorage = JSON.parse(localStorage.getItem('tasks') || '[]');
-    const taskId = currentTask.dataset.id;
-
-    for (let i = 0; i < taskStorage.length; i++) {
-      if (taskStorage[i]._taskId == taskId) {
-        taskStorage[i]._task = newText;
+        if (updateStatus) {
+          taskStorage[i]._status = 'completed';
+          currentTask.querySelector(
+            'p.task-text-content'
+          ).style.textDecoration = 'line-through';
+          currentTask.querySelector('p.task-text-content').style.opacity =
+            '0.5';
+          currentTask.querySelector('i.fa-circle').className =
+            'fa-regular fa-circle-dot';
+        } else {
+          let oldText = currentTask.querySelector(
+            'p.task-text-content'
+          ).textContent;
+          let newText = prompt(`Ingrese el nuevo texto de la tarea`, oldText);
+          currentTask.querySelector('p.task-text-content').textContent =
+            newText;
+          taskStorage[i]._task = newText;
+        }
         break;
       }
     }
@@ -212,7 +205,7 @@ taskList.addEventListener('click', event => {
   //   console.log(event.target);
   if (event.target.classList.contains('fa-circle')) {
     const currentTask = event.target.closest('.task');
-    new Task().checkTaskElement(currentTask);
+    new Task().updateTaskElement(currentTask, true);
 
     taskList.appendChild(currentTask);
   } else if (
@@ -224,7 +217,7 @@ taskList.addEventListener('click', event => {
       new Task().deleteTaskElement(currentTask);
     } else if (event.target.classList.contains('fa-pencil')) {
       const currentTask = event.target.closest('.task');
-      new Task().updateTaskElement(currentTask);
+      new Task().updateTaskElement(currentTask, false);
     }
   }
   const taskInput = document.getElementById('insert-task');
