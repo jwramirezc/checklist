@@ -149,6 +149,10 @@ h1 {
 .task-text-content {
   width: 100%;
 }
+.task-text-content.completed {
+  text-decoration: line-through;
+  color: var(--color-gray);
+}
 
 .container-task p {
   margin-right: 30px;
