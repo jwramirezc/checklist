@@ -68,13 +68,13 @@ class Task {
     new Task().storeTaskInLocalStorage(newTask);
     return newTask;
   }
-  updateTaskElement(currentTask, updateStatus) {
+  updateTaskElement(currentTask, { checkTask, editTask, deleteTask }) {
     const taskStorage = JSON.parse(localStorage.getItem('tasks') || '[]');
     const taskId = currentTask.dataset.id;
 
     for (let i = 0; i < taskStorage.length; i++) {
       if (taskStorage[i]._taskId == taskId) {
-        if (updateStatus) {
+        if (checkTask) {
           taskStorage[i]._status = 'completed';
           currentTask.querySelector(
             'p.task-text-content'
@@ -83,7 +83,8 @@ class Task {
             '0.5';
           currentTask.querySelector('i.fa-circle').className =
             'fa-regular fa-circle-dot';
-        } else {
+          break;
+        } else if (editTask) {
           let oldText = currentTask.querySelector(
             'p.task-text-content'
           ).textContent;
@@ -91,9 +92,16 @@ class Task {
           currentTask.querySelector('p.task-text-content').textContent =
             newText;
           taskStorage[i]._task = newText;
+          break;
+        } else {
+          if (deleteTask) {
+            taskStorage.splice(i, 1); // Elimina la instancia con id igual a taskId
+          }
+          taskList.removeChild(currentTask);
+          break;
         }
-        break;
       }
+      break;
     }
     localStorage.setItem('tasks', JSON.stringify(taskStorage));
   }
@@ -200,12 +208,16 @@ class Task {
 
 new Task().loadTasksFromLocalStorage();
 
-//evento click para el botón las opciones de la tarea
+//evento click para el botón las opciones de la tarea (check-editar-eliminar)
 taskList.addEventListener('click', event => {
   //   console.log(event.target);
   if (event.target.classList.contains('fa-circle')) {
     const currentTask = event.target.closest('.task');
-    new Task().updateTaskElement(currentTask, true);
+    new Task().updateTaskElement(currentTask, {
+      checkTask: true,
+      editTask: false,
+      deleteTask: false,
+    });
 
     taskList.appendChild(currentTask);
   } else if (
@@ -214,10 +226,18 @@ taskList.addEventListener('click', event => {
   ) {
     const currentTask = event.target.closest('.task');
     if (event.target.classList.contains('fa-delete-left')) {
-      new Task().deleteTaskElement(currentTask);
+      new Task().updateTaskElement(currentTask, {
+        checkTask: false,
+        editTask: false,
+        deleteTask: true,
+      });
     } else if (event.target.classList.contains('fa-pencil')) {
       const currentTask = event.target.closest('.task');
-      new Task().updateTaskElement(currentTask, false);
+      new Task().updateTaskElement(currentTask, {
+        checkTask: false,
+        editTask: false,
+        deleteTask: true,
+      });
     }
   }
   const taskInput = document.getElementById('insert-task');
