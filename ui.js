@@ -60,4 +60,11 @@ export class UI {
       mainElement.classList.add('dark-mode');
     }
   }
+
+  static showDeleteButton(deleteAll) {
+    if (localStorage.getItem('tasks') !== '[]') {
+      console.log('empty');
+      deleteAll.style.display = 'block';
+    }
+  }
 }

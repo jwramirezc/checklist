@@ -1,4 +1,4 @@
-import { Task } from './task.js';
+import { Task, UI } from './task.js';
 
 export class Storage {
   static getTasks() {
@@ -20,7 +20,6 @@ export class Storage {
     const index = tasks.findIndex(task => task.taskId === updatedTask.taskId);
     if (index !== -1) {
       tasks[index] = updatedTask;
-      //   tasks = this.reorderTasks(tasks);
       this.saveTasks(tasks);
     }
   }

@@ -33,6 +33,7 @@ class TodoApp {
       fragment.appendChild(element);
     });
     this.taskList.appendChild(fragment);
+    UI.showDeleteButton(this.deleteAll);
   }
 
   handleNewTask(event) {
@@ -61,6 +62,7 @@ class TodoApp {
     const taskElement = UI.createTaskElement(task);
     UI.appendTask(this.taskList, taskElement);
     Storage.saveNewTask(task);
+    UI.showDeleteButton(this.deleteAll);
   }
 
   handleTaskAction(event) {
