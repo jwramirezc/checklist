@@ -208,3 +208,17 @@ footer {
   bottom: 0;
   margin-bottom: 30px;
 }
+
+@media (max-width: 720px) {
+  main {
+    margin: 8px;
+    padding: 10px;
+  }
+  .container-new-task {
+    display: flex;
+    flex-direction: column;
+  }
+  .new-task {
+    display: block;
+  }
+}
