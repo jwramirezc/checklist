@@ -51,6 +51,23 @@ main {
   background-color: var(--color-gray-dark);
 }
 
+.container-delete {
+  display: flex;
+  justify-content: flex-end;
+}
+
+#btn-delete-all {
+  padding: 5px 20px;
+  border-radius: 5px;
+  background-color: #f7f7f7;
+  border: solid 1px #cecdcd;
+  cursor: pointer;
+}
+#btn-delete-all:hover {
+  color: white;
+  background-color: #e32f46;
+}
+
 .dark-mode {
   color: white;
   background-color: var(--color-gray-dark);

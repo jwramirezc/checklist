@@ -2,15 +2,17 @@ import { Task } from './task.js';
 
 export class Storage {
   static getTasks() {
-    return JSON.parse(localStorage.getItem('tasks') || '[]').map(
+    const tasks = JSON.parse(localStorage.getItem('tasks') || '[]').map(
       taskData => new Task(taskData._taskId, taskData._task, taskData._status)
     );
+    const activeTasks = tasks.filter(task => task.status !== 'completed');
+    const completedTasks = tasks.filter(task => task.status === 'completed');
+    return [...activeTasks, ...completedTasks];
   }
-
-  static saveTask(task) {
+  static saveNewTask(task) {
     const tasks = this.getTasks();
     tasks.push(task);
-    localStorage.setItem('tasks', JSON.stringify(tasks));
+    this.saveTasks(tasks);
   }
 
   static updateTask(updatedTask) {
@@ -18,12 +20,23 @@ export class Storage {
     const index = tasks.findIndex(task => task.taskId === updatedTask.taskId);
     if (index !== -1) {
       tasks[index] = updatedTask;
-      localStorage.setItem('tasks', JSON.stringify(tasks));
+      //   tasks = this.reorderTasks(tasks);
+      this.saveTasks(tasks);
     }
   }
 
   static deleteTask(taskId) {
     const tasks = this.getTasks().filter(task => task.taskId !== taskId);
+    this.saveTasks(tasks);
+  }
+
+  static reorderTasks(tasks) {
+    const completedTasks = tasks.filter(task => task.status == 'completed');
+    const activeTasks = tasks.filter(task => task.status !== 'completed');
+    return [...activeTasks, ...completedTasks];
+  }
+
+  static saveTasks(tasks) {
     localStorage.setItem('tasks', JSON.stringify(tasks));
   }
 }

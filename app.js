@@ -9,6 +9,7 @@ class TodoApp {
     this.taskInput = document.getElementById('insert-task');
     this.changeTheme = document.getElementById('btn-toogle-theme');
     this.mainElement = document.querySelector('main');
+    this.deleteAll = document.getElementById('btn-delete-all');
 
     this.initEventListeners();
     this.loadTasks();
@@ -18,6 +19,7 @@ class TodoApp {
   initEventListeners() {
     this.taskForm.addEventListener('submit', this.handleNewTask.bind(this));
     this.taskList.addEventListener('click', this.handleTaskAction.bind(this));
+    this.deleteAll.addEventListener('click', this.deleteAllTask.bind(this));
     this.changeTheme.addEventListener('click', () =>
       UI.toggleTheme(this.mainElement)
     );
@@ -44,10 +46,21 @@ class TodoApp {
     UI.clearInput(this.taskInput);
   }
 
+  deleteAllTask() {
+    if (confirm('¿Está seguro de eliminar todas las tareas?')) {
+      console.log('Eliminando tareas');
+      const tasks = Storage.getTasks();
+      tasks.forEach(task => {
+        Storage.deleteTask(task.taskId);
+      });
+    }
+    location.reload();
+  }
+
   addTask(task) {
     const taskElement = UI.createTaskElement(task);
     UI.appendTask(this.taskList, taskElement);
-    Storage.saveTask(task);
+    Storage.saveNewTask(task);
   }
 
   handleTaskAction(event) {
@@ -93,6 +106,24 @@ class TodoApp {
       UI.updateTaskElement(taskElement, task);
       Storage.updateTask(task);
     }
+  }
+
+  reorderTaskElements() {
+    const tasks = Storage.getTasks();
+    const fragment = document.createDocumentFragment();
+    tasks.forEach(task => {
+      const existingElement = this.taskList.querySelector(
+        `[data-id="${task.taskId}"]`
+      );
+      if (existingElement) {
+        fragment.appendChild(existingElement);
+      } else {
+        const newElement = UI.createTaskElement(task);
+        fragment.appendChild(newElement);
+      }
+    });
+    this.taskList.innerHTML = '';
+    this.taskList.appendChild(fragment);
   }
 }
 

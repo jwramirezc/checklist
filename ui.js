@@ -20,7 +20,6 @@ export class UI {
           <i class="fa-solid fa-pencil"></i>
         </button>
       `;
-
     return li;
   }
 
