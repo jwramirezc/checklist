@@ -63,7 +63,7 @@ export class UI {
 
   static showDeleteButton(deleteAll) {
     if (localStorage.getItem('tasks') !== '[]') {
-      console.log('empty');
+      // console.log('empty');
       deleteAll.style.display = 'block';
     }
   }
